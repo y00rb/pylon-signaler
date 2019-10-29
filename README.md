@@ -16,3 +16,8 @@ go get
 ```
 go run main.go
 ```
+4. Check running status, open `http://localhost:8383/health` browser. if
+   succeed, you would see:
+```json
+{ alive: true}
+```
