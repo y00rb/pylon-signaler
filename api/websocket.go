@@ -21,7 +21,7 @@ var AuthenticateRequest func(params url.Values) (apiKey, room, sessionKey string
 var OnClientMessage func(ApiKey, Room, SessionKey string, raw []byte)
 
 func sendMembers(s *session) error {
-	message := messageMembers{messageBase: messageBase{Method: "members"}}
+	message := messageMembers{messageBase: messageBase{Method: "members", RoomID: s.Room}}
 	message.Args.Members = make([]string, 0)
 
 	if membersMap, ok := pylonRoom.GetRoom(s.ApiKey, s.Room); ok == true {
@@ -64,12 +64,12 @@ func sendCandidate(s *session, raw []byte) error {
 }
 
 func sendPing(session *session) error {
-	message := messagePing{messageBase: messageBase{Method: "ping"}}
+	message := messagePing{messageBase: messageBase{Method: "ping", RoomID: session.Room}}
 	return session.WriteJSON(message)
 }
 
 func announceExit(apiKey, room, sessionKey string) {
-	message := messageExit{messageBase: messageBase{Method: "exit"}}
+	message := messageExit{messageBase: messageBase{Method: "exit", RoomID: room}}
 	message.Args.SessionKey = sessionKey
 
 	if membersMap, ok := pylonRoom.GetRoom(apiKey, room); ok == true {

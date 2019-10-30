@@ -10,6 +10,7 @@ import (
 
 type messageBase struct {
 	Method string `json:"method"`
+	RoomID string `json:"roomID"`
 }
 
 type messageMembers struct {
