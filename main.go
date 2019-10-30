@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"math/rand"
 	"net/url"
 
@@ -24,7 +25,16 @@ func randSeq(n int) string {
 
 // AuthenticateRequest is set auth in signaler server
 func (m *MySignalerServer) AuthenticateRequest(params url.Values) (apiKey, room, sessionKey string, ok bool) {
-	return "ABC", "ABC", randSeq(16), true
+	roomId := params.Get("roomID")
+	if roomId == "" {
+		b := make([]byte, 16)
+		_, err := rand.Read(b)
+		if err != nil {
+			log.Fatal(err)
+		}
+		roomId = fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6], b[6:8], b[8:10], b[10:])
+	}
+	return "ABC", roomId, randSeq(16), true
 }
 
 // OnClientMessage is handle message for client
